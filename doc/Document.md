@@ -88,20 +88,19 @@ typically through browser's `back, forward` buttons.
 When the document is first loaded, there is one history entry,
 containing the initial URL. Afterwards, history entries evolve in 2 ways:
 - **push** -
-  add a new entry after the active entry
-  (remove later entries if any)
+  add a new entry after the active entry;
+  later entries are removed.
 - **replace** -
-  replace the active entry with a new entry
-  (other entries are not affected)
+  replace the active entry with a new entry;
+  other entries are not affected.
 
-in either operation, the new entry is then activated.
+in either case, the new entry is then activated.
 
 When user enters a URL manually, or clicks a bookmark,
 or clicks a vanilla `<a>`,
 a new history entry is *push-ed*.
 
-Now, let's see how the application code can interact with history
-through pager APIs.
+Now, let's see how pager APIs can interact with history.
 
 ## pager.push/replace(page,props)
 
@@ -190,7 +189,7 @@ instead, it must check for authentication every time it is invoked.
 Every history entry constains a `state`.
 The `state` of the currently active entry can be accessed through `pager.state`.
 
-The following example saves the input value in `pager.state`,
+The following example saves user input in `pager.state`,
 so that it can persist through back/forward navigations.
 ```html
 <input defaultValue={pager.state} onChange={e=>pager.state=e.target.value}/>
@@ -200,9 +199,9 @@ The value of `pager.state` should be JSON-able.
 The initial value is `null`.
 `pager.push/replace()` creates a new entry with null state.
 
-To change the value, `pager.state` must be reassigned to.
+To change the state, `pager.state` must be reassigned to.
 That is, `pager.state.foo=bar` does not work;
-it needs to be `pager.state={foo:bar}`
+you'll need `pager.state={foo:bar}`
 
 
 
@@ -210,11 +209,11 @@ it needs to be `pager.state={foo:bar}`
 
 `pager.go(delta)` activates an existing history entry relative to the currently active entry.
 
-`pager.go(-1)` means "going back" one step.
+`pager.go(-1)` means "going back", same as browser back button.
 
-`pager.go(0)` means "refreshing" the current entry;
-the `onRequest()` handler will be triggered.
-(Browser `refresh` will reload the document; `pager.go(0)`.)
+`pager.go(0)` re-activates the active entry;
+it's usually for triggering `onRequest()` again.
+(Note: browser `refresh` will reload the document; `pager.go(0)` will not.)
 
 
 ## pager.A
@@ -259,8 +258,7 @@ To do a `replace` instead of `push`
 
 ## dependency passing
 
-A page often depends on some external data (*e.g.* a config string)
-or services (*e.g.* a storage interface).
+A page often depends on some external data or services.
 Such dependencies can be wired statically
 -- or, we may prefer all dependencies passed in explicitly.
 
@@ -279,7 +277,7 @@ through `pager.db`.
 
 It may be desirable to further decouple page components from `pager`.
 The page component enumerates required dependencies;
-the `onRequest()` handler resolves the dependencies.
+the `onRequest()` handler injects the dependencies.
 
 ```js
 const EditPage = ({db, item}) => ...
