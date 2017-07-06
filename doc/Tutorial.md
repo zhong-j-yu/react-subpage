@@ -1,7 +1,7 @@
-# react-subpage Tutorial
+# `react-subpage` Tutorial
 
-This is a simple hello-world tutorial for
-[`react-subpage`](https://github.com/zhong-j-yu/react-subpage).
+Tutorial for
+[`react-subpage`](https://github.com/zhong-j-yu/react-subpage)
 
 ## create a React project with `react-subpage`
 
@@ -230,61 +230,7 @@ HelloPage.onRequest = (page,props,pager)=>{
 }
 ```
 
-## dependency passing
 
-Previously, we looked up description from a fixed/global `DICT` object.
-It might be considered harmful to have such dependencies.
-Instead, let's try to pass dependencies in function arguments.
-
-Since the `pager` object is passed around in our application,
-we can attach dependencies to `pager` so that they can be accessed.
-
-Of course, someone somewhere must instantiate dependencies to concrete
-implementations. This is usually done at app startup phase.
-In our case, we do it where `pager` is instantiated
-
-```js
-const pager = new Pager(urlMap);
-pager.dict = DICT; // or something else
-```
-
-In `HelloPage.onRequest()`, we look up from `pager.dict`
-
-```js
-   // const desc = DICT[name];
-   const desc = pager.dict[name];
-```
-
-If we want to do the lookup inside `Hellopage` component,
-it too can be done through `pager.dict`
-
-```js
-const HelloPage = ({name,pager})=>
-  <div>
-    Hello, {name}({pager.dict[name]})!
-  </div>
-// remove HelloPage.onRequest; use default handler
-```
-
-Or, we can decouple the component from `pager`, ask all dependencies
-passed directly; use `onRequest()` to resolve and inject the dependencies.
-
-```js
-const HelloPage = ({name,dict,goHome})=>
-  <div>
-    Hello, {name}({dict[name]})!
-    <button onClick={goHome}>go home</button>
-  </div>
-
-HelloPage.onRequest = (page,props,pager)=>{
-  props = {
-    name : props.name,
-    dict : pager.dict,
-    goHome : e=>pager.push(HomePage)
-  }
-  return pager.view(page,props);
-}
-```
 
 ## see also
 

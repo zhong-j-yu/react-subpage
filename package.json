@@ -2,11 +2,12 @@
   "name": "react-subpage",
   "version": "1.0.0",
   "description": "A conventional client-side router for React",
+  "files": [ "src/" ],
   "main": "src/Pager.js",
   "scripts": {
     "test": "eslint src/*.js && mocha"
   },
-  "author": "Zhong Yu <zhong.j.yu@gmail.com>",
+  "author": "Zhong Yu <zhong.j.yu@gmail.com> (http://zhong-j-yu.github.io/)",
   "license": "ISC",
   "repository": {
     "type": "git",
@@ -28,7 +29,6 @@
   "devDependencies": {
     "react": "^15.5.4",
     "eslint": "^4.0.0"
-  },
+  }
 
-  "files": [ "src/" ]
 }
