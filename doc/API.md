@@ -129,7 +129,7 @@ Props of `A` -
 
 - `props` - the props for the page, default `{}`
 
-- *`$foo`* - add `foo` to `props`
+- *`$foo`* - add `foo` into `props`
 
 - `replace` - if true, will call `pager.replace()` instead of `pager.push()`
 
@@ -139,7 +139,9 @@ Example:
 
 ```html
     <A id='p2' replace page={P} props={{x:1}} $x={2} > children.. </A>
+
 renders to:
+
     <a id='p2' href='/p/2' onClick={e=>{
       e.preventDefault();
       pager.replace(P,{x:2});

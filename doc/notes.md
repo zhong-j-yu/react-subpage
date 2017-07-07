@@ -88,3 +88,25 @@ HelloPage.onRequest = (page,props,pager)=>{
   return pager.view(page,props);
 }
 ```
+
+
+
+## tutorial pager.replace()
+
+
+Also notice that the `<input>` field does not retain the value any more.
+This is because `pager.replace()` clears the `pager.state`,
+which is the intended behavior. To work around that, we can reassign
+`pager.state` after `pager.replace()`
+
+```js
+const goHome = savedState=>event=>{
+  pager.replace(HomePage);
+  pager.state=savedState;
+}
+const HelloPage = ({name,pager})=>
+  <div>
+    Hello, {name}!
+    <button onClick={goHome(name)}>go home</button>
+  </div>
+```

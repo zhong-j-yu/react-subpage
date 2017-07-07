@@ -37,9 +37,9 @@ const pager = new Pager(urlMap);
 ReactDOM.render(pager.element, document.getElementById('root'));
 ```
 
-We have one page, `HomePage`, that's mapped to URL `'/'`.
-We create a `pager` with the `urlMap`.
-The root element rendered by React is `pager.element`.
+We have one page, `HomePage`, mapped to URL `'/'`.
+We created a `pager` with the `urlMap`.
+`ReactDOM` renders `pager.element` at root.
 
 
 ## HelloPage
@@ -59,12 +59,12 @@ const urlMap = {
 }
 ```
 
-Enter the browser URL as `'/hello/world'`, and you'll see the new page.
+Change the browser URL to `'/hello/world'`, and you'll see the new hello page.
 
 
 ## NotFound
 
-To catch unmapped URLs, create a `NotFound` page mapping to all URLs,
+To catch unmapped URLs, create a `NotFound` page that maps to all URLs,
 as the last entry of `urlMap`.
 
 ```js
@@ -80,7 +80,7 @@ const urlMap = {
 Now enter URL `'/foo'`, and you'll see the error page.
 
 
-## navigation
+## pager.push()
 
 Let's add a button in `HelloPage` that leads back to the home page.
 
@@ -95,9 +95,7 @@ const HelloPage = ({name,pager})=>
 When the button is clicked, `pager.push(HomePage)` causes the app
 to switch to `HomePage`.
 
-Similarly, we want to navigate from `HomePage` to `HelloPage`,
-with user provided parameter `name`
-
+Similarly, on `HomePage`, we want to navigate to `HelloPage` with `name` parameter.
 ```js
 const HomePage = ({pager})=>
   <div>
@@ -109,11 +107,11 @@ const HomePage = ({pager})=>
   </div>
 ```
 
-Now, enter `my little fiend` on home page, and see what happens.
+Now, enter `my little fiend` in the input box, and see what happens.
 
 ## pager.A
 
-If we want to have links `<a>`, use component `pager.A`
+If you want to have links `<a>`, use component `pager.A`
 
 ```js
 const HelloPage = ({name,pager:{A}})=>
@@ -127,14 +125,14 @@ const HelloPage = ({name,pager:{A}})=>
 ## pager.state
 
 If we use browser BACK button to go back to the home page,
-the previously entered value is gone.
+the previously entered value in `<input>` is gone.
 Let's fix that by saving the value in `pager.state`.
 
 ```js
 const HomePage = ({pager})=>
   <div>
     Sweet Home.
-    <input defaultValue={pager.state} onKeyDown={e=>{
+    <input defaultValue={pager.state} onKeyUp={e=>{
       const name = pager.state = e.target.value;
       if(e.keyCode===13 && name) pager.push(HelloPage,{name});
     }}/>
@@ -144,9 +142,6 @@ const HomePage = ({pager})=>
 Now enter something, and try browser BACK/FORWARD, we'll see
 that the value is retained with that page.
 
-Note that `pager.state` is associated with the current history entry.
-If you click `[go home]` button on `HelloPage`, a new history entry
-is created, which has `pager.state` as `null`.
 
 
 ## pager.replace()
@@ -155,7 +150,7 @@ is created, which has `pager.state` as `null`.
 creating a new one like `pager.push()` does.
 This is preferable in some use cases.
 
-Let's replace the two calls of `pager.push()` in `HomePage` and `HelloPage`
+Let's replace the calls of `pager.push()`
 with `pager.replace()`, and test the app again.
 For `pager.A`, add `replace`, *e.g.*
 `<A replace page={HomePage}>`
@@ -163,24 +158,8 @@ For `pager.A`, add `replace`, *e.g.*
 To start with a clean history, run the app in a new browser tab/window.
 Notice how browser BACK button does not work any more,
 because we are not creating any new entries.
-This may or may not be a usability issue, depending on the use case.
+This may be a feature or a bug, depending on the requirement.
 
-Also notice that the `<input>` field does not retain the value any more.
-This is because `pager.replace()` clears the `pager.state`,
-which is the intended behavior. To work around that, we can reassign
-`pager.state` after `pager.replace()`
-
-```js
-const goHome = savedState=>event=>{
-  pager.replace(HomePage);
-  pager.state=savedState;
-}
-const HelloPage = ({name,pager})=>
-  <div>
-    Hello, {name}!
-    <button onClick={goHome(name)}>go home</button>
-  </div>
-```
 
 ## onRequest()
 
@@ -204,7 +183,7 @@ HelloPage.onRequest = (page,props,pager)=>{
   const desc = DICT[name];
   return pager.view(page,{name,desc});
 }
-const DICT = {'cat':'good', 'rat':'food'};
+const DICT = {'cat':'meow', 'dog':'woof'};
 ```
 
 We may also decide to redirect to another page in some cases
@@ -234,5 +213,7 @@ HelloPage.onRequest = (page,props,pager)=>{
 
 ## see also
 
-[`react-subpage-demo`](https://github.com/zhong-j-yu/react-subpage-demo)
+- [`react-subpage` document](https://github.com/zhong-j-yu/react-subpage/blob/master/doc/Document.md)
+
+- [`react-subpage-demo`](https://github.com/zhong-j-yu/react-subpage-demo)
 -- a demo app with login, data read/write.
